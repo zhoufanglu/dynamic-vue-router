@@ -1,28 +1,55 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Home from '../views/Home.vue'
+import login from '../views/login'
+import allSeePage from '../views/allSeePage'
+import adminPage from '../views/adminPage'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
-const routes = [
+//模拟权限路由
+export const authRouter = [
   {
-    path: "/",
-    name: "Home",
+    path: '/allSeePage',
+    name: '所有人可见',
+    component: allSeePage
+  },
+  {
+    path: '/adminPage',
+    name: '管理员可见',
+    component: adminPage
+  }
+]
+
+//初始的路由，所有人可见
+export const constantRoutes = [
+  {
+    path: '/home',
+    name: 'home',
     component: Home,
+    children: []
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    path: '/',
+    redirect: '/login'
   },
-];
+  {
+    path: '/login',
+    name: 'login',
+    component: login
+  }
+]
 
-const router = new VueRouter({
-  routes,
-});
+const createRouter = () =>
+  new VueRouter({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes
+  })
 
-export default router;
+export const router = createRouter()
+
+export function resetRouter() {
+  const newRouter = createRouter()
+  router.matcher = newRouter.matcher // reset router
+}
