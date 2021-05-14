@@ -5,21 +5,11 @@ import { router } from './router'
 import store from './store'
 import { Message } from 'element-ui'
 router.beforeEach(async (to, from, next) => {
-  //获取token
+  //获取用户信息
   let { userInfo } = store.state
   const { userName } = userInfo
   //有用户信息
   if (userName) {
-    //添加路由
-    /*if (userName === 'admin') {
-      authRouter.forEach((i) => {
-        router.matcher.addRoute('home', i)
-      })
-    } else {
-      //router.addRoute([...authRouter])
-    }
-    console.log(19, router.options)*/
-
     next()
   }
   //无用户信息

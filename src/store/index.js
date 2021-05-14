@@ -38,7 +38,8 @@ export default new Vuex.Store({
         commit('SET_USER_INFO', {
           userName,
           password,
-          token
+          token,
+          routerList
         })
         //添加路由
         console.log('路由添加前', router.getRoutes())
