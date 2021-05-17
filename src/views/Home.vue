@@ -55,6 +55,7 @@ export default {
     display: flex;
     align-items: center;
     .p-side-bar {
+      border: solid 1px red;
       width: 200px;
     }
   }
