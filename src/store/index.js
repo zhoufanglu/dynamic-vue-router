@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { router, authRouter, resetRouter } from '../router'
+import { authRouter, resetRouter, router } from '../router'
+
+import { filterAsyncRouter } from '@/util'
+//页面刷新不丢失插件
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
@@ -16,24 +20,39 @@ export default new Vuex.Store({
   mutations: {
     SET_USER_INFO(state, val) {
       state.userInfo = Object.assign(state.userInfo, val)
+    },
+    ADD_ROUTE(state) {
+      let routerList = JSON.parse(JSON.stringify(state.userInfo.routerList))
+      console.log(26, router.getRoutes().length)
+      //路由未添加之前是4个,添加完之后是6个，我们用是否小于6个，来判断是否要添加
+      if (router.getRoutes().length < 6) {
+        routerList = filterAsyncRouter(routerList)
+        console.log('路由添加前', router.getRoutes())
+        routerList.forEach((i) => {
+          //在home父路由内添加子路由
+          router.addRoute('home', i)
+        })
+        console.log('路由添加后', router.getRoutes())
+      }
     }
   },
   actions: {
     //登陆
     login({ commit }, userInfo) {
-      console.log(23, authRouter)
       const { userName, password } = userInfo
       return new Promise((resolve) => {
         //模拟登陆，获取用户信息， 权限路由列表
         //假设返回的有token, 路由列表(根据不同用户返回不同)
-        //模拟路由列表
+        /**********************模拟后端传过来的路由列表----S***********************/
         let routerList = []
         if (userName === 'admin') {
           routerList = authRouter
         } else if (userName === 'commonUser') {
           routerList = [authRouter[0]]
         }
+        /**********************模拟后端传过来的路由列表----E***********************/
         let token = 'testToken'
+        console.log(56, routerList)
         //把用户信息存入vuex
         commit('SET_USER_INFO', {
           userName,
@@ -41,13 +60,9 @@ export default new Vuex.Store({
           token,
           routerList
         })
+        console.log('login over')
         //添加路由
-        console.log('路由添加前', router.getRoutes())
-        routerList.forEach((i) => {
-          //在home父路由内添加子路由
-          router.addRoute('home', i)
-        })
-        console.log('路由添加后', router.getRoutes())
+        commit('ADD_ROUTE')
         resolve()
       })
     },
@@ -64,7 +79,12 @@ export default new Vuex.Store({
         resetRouter()
         resolve()
       })
+    },
+    //添加路由
+    addRoute({ commit }) {
+      commit('ADD_ROUTE')
     }
   },
-  modules: {}
+  modules: {},
+  plugins: [createPersistedState()]
 })

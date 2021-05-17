@@ -4,13 +4,28 @@
 import { router } from './router'
 import store from './store'
 import { Message } from 'element-ui'
+//import { filterAsyncRouter } from '@/util'
+
 router.beforeEach(async (to, from, next) => {
   //获取用户信息
   let { userInfo } = store.state
   const { userName } = userInfo
+  console.log('用户角色', userName ? userName : '未登陆')
   //有用户信息
   if (userName) {
-    next()
+    await store.dispatch('addRoute')
+    let { routerList } = userInfo
+    //根据to.name来判断是否为动态路由, 是否有人知道还有更好的判断方法？
+    if (!to.name) {
+      //当前路由是动态的，确定是有的, 有就跳自己，没有就跳404
+      if (routerList.findIndex((i) => i.path === to.path) !== -1) {
+        next({ ...to, replace: true })
+      } else {
+        next('/404')
+      }
+    } else {
+      next()
+    }
   }
   //无用户信息
   else {

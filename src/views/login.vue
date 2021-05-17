@@ -30,9 +30,12 @@ export default {
   mounted() {},
   methods: {
     onSubmit() {
-      this.$store.dispatch('login', this.userInfo)
+      this.$store.dispatch('login', this.userInfo).then(() => {
+        console.log('登陆跳转')
+        this.$router.push('/home')
+        //this.$router.push('/home')
+      })
       //this.$store.dispatch('setUserInfo', this.userInfo)
-      this.$router.push('/home')
     }
   }
 }
