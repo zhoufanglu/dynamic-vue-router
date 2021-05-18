@@ -19,7 +19,7 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_USER_INFO(state, val) {
-      state.userInfo = Object.assign(state.userInfo, val)
+      state.userInfo = val
     },
     ADD_ROUTE(state) {
       let routerList = JSON.parse(JSON.stringify(state.userInfo.routerList))
@@ -73,7 +73,8 @@ export default new Vuex.Store({
         commit('SET_USER_INFO', {
           userName: '',
           password: '',
-          token: ''
+          token: '',
+          routerList: []
         })
         //重置路由
         resetRouter()
