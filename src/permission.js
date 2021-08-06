@@ -17,13 +17,14 @@ router.beforeEach(async (to, from, next) => {
     let { routerList } = userInfo
     //根据to.name来判断是否为动态路由, 是否有人知道还有更好的判断方法？
     if (!to.name) {
-      //当前路由是动态的，确定是有的, 有就跳自己，没有就跳404
+      //当前路由是动态的，确定是有的, 有就跳自己，没有就跳404,, tip: 刷新后动态路由的to.name为空
       if (routerList.findIndex((i) => i.path === to.path) !== -1) {
         next({ ...to, replace: true })
       } else {
         next('/404')
       }
     } else {
+      console.log(28, router.getRoutes())
       next()
     }
   }

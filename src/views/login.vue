@@ -32,7 +32,7 @@ export default {
     onSubmit() {
       this.$store.dispatch('login', this.userInfo).then(() => {
         console.log('登陆跳转')
-        this.$router.push('/home')
+        this.$router.push({ path: '/home' })
         //this.$router.push('/home')
       })
       //this.$store.dispatch('setUserInfo', this.userInfo)

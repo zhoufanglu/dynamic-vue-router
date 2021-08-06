@@ -23,9 +23,9 @@ export default new Vuex.Store({
     },
     ADD_ROUTE(state) {
       let routerList = JSON.parse(JSON.stringify(state.userInfo.routerList))
-      console.log(26, router.getRoutes().length)
-      //路由未添加之前是4个,添加完之后是6个，我们用是否小于6个，来判断是否要添加
-      if (router.getRoutes().length < 6) {
+      //console.log(26, router.getRoutes().length)
+      //路由未添加之前是4个,我们判断是否添加过，没添加过就添加
+      if (router.getRoutes().length === 4) {
         routerList = filterAsyncRouter(routerList)
         console.log('路由添加前', router.getRoutes())
         routerList.forEach((i) => {
