@@ -1,4 +1,5 @@
 # vue动态路由的实现
+* 此项目是基于`vue-router:3x`版本
 * 目前应该使用`addRoute`!!! 而不是`addRoutes`
 * 介绍[地址](https://juejin.cn/post/6963211038850449416)
 
